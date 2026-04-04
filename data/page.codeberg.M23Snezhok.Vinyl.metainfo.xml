@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>page.codeberg.M23Snezhok.Vinyl</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <name>Vinyl</name>
+  <summary>Elegant music player</summary>
+  <description>
+    <p>
+      Vinyl is a simple and elegant adwaita music player, which aims to provide a simple codebase for developers,
+      while simple users get the same or more features as in other music players. Flawless integrated with the GNOME desktop, 
+      Vinyl provides a simple user-friendly interface, MPRIS support, lyrics support and more. Vinyl is the first player with 
+      a good lyrics (.lrc) support.
+    </p>
+
+    <p>Features include:</p>
+    <ul>
+      <li>Very simple user-friendly interface inspired by amberol.</li>
+      <li>Play of music using GStreamer.</li>
+      <li>Viewing of lyrics like listview.</li>
+      <li>MPRIS support for controlling Vinyl from other applications.</li>
+      <li>A fully responsive interface using GTK and Libadwaita.</li>
+    </ul>
+  </description>
+
+  <developer id="page.codeberg.M23Snezhok">
+    <name translate="no">M23Snezhok</name>
+  </developer>
+
+  <url type="homepage">https://codeberg.org/M23Snezhok/Vinyl</url>
+  <url type="vcs-browser">https://codeberg.org/M23Snezhok/Vinyl</url>
+  <url type="bugtracker">https://codeberg.org/M23Snezhok/Vinyl/issues</url>
+  <url type="faq">https://codeberg.org/M23Snezhok/Vinyl#readme</url>
+
+  <translation type="gettext">Vinyl</translation>
+  <launchable type="desktop-id">page.codeberg.M23Snezhok.Vinyl.desktop</launchable>
+  <content_rating type="oars-1.1" />
+
+  <branding>
+    <color type="primary" scheme_preference="light">#dc8add</color>
+    <color type="primary" scheme_preference="dark">#813d9c</color>
+  </branding>
+
+  <requires>
+    <internet>offline-only</internet>
+  </requires>
+
+  <categories>
+    <category>AudioVideo</category>
+    <category>Music</category>
+  </categories>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://codeberg.org/M23Snezhok/Vinyl/raw/tag/v1.1.0/images/preview1.png</image>
+      <caption>Vinyl playing Why Are Sundays So Depressing</caption>
+    </screenshot>
+
+    <screenshot>
+      <image>https://codeberg.org/M23Snezhok/Vinyl/raw/tag/v1.1.0/images/preview2.png</image>
+      <caption>Vinyl shows lyrics for the currently playing track</caption>
+    </screenshot>
+
+    <screenshot>
+      <image>https://codeberg.org/M23Snezhok/Vinyl/raw/tag/v1.1.0/images/preview3.png</image>
+      <caption>Resizable window Vinyl</caption>
+    </screenshot>
+
+    <screenshot>
+      <image>https://codeberg.org/M23Snezhok/Vinyl/raw/tag/v1.1.0/images/preview4.png</image>
+      <caption>Resizable window Vinyl with lyrics</caption>
+    </screenshot>
+  </screenshots>
+
+  <releases>
+  <release version="1.1.0" date="2026-03-17">
+    <url type="details">https://codeberg.org/M23Snezhok/Vinyl/releases/tag/v1.1.0</url>
+    <description>
+      <p>Synchronized lyrics have arrived!</p>
+        <ul>
+          <li>Synchronized lyrics finally gets a support</li>
+          <li>Fix crash app after restore playlist</li>
+          <li>Indicate currently playing song</li>
+        </ul>
+    </description>
+  </release>
+  <release version="1.0.1" date="2026-03-09">
+    <url type="details">https://codeberg.org/M23Snezhok/Vinyl/releases/tag/v1.0.1</url>
+    <description>
+      <p>HOTFIX</p>
+        <ul>
+          <li>Fix developer name for flathub</li>
+          <li>Remove useless cleanup from manifest</li>
+        </ul>
+    </description>
+  </release>
+  <release version="1.0" date="2026-03-08">
+    <url type="details">https://codeberg.org/M23Snezhok/Vinyl/releases/tag/v1.0</url>
+    <description>
+      <p>First release</p>
+        <ul>
+          <li>Play music with gstreamer</li>
+          <li>Basic media controls (play, pause, loop track or playlist)</li>
+          <li>MPRIS support</li>
+          <li>Lyrics (.lrc) support</li>
+          <li>Simple user friendly UI with gtk4 and libadwaita</li>
+          <li>Simple codebase</li>
+        </ul>
+    </description>
+  </release>
+  </releases>
+
+</component>

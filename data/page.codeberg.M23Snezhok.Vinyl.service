@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=page.codeberg.M23Snezhok.Vinyl
+Exec=Vinyl --gapplication-service
+

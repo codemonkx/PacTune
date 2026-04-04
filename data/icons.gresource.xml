@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="page/codeberg/M23Snezhok/PacTune/icons">
+        <file preprocess="xml-stripblanks" alias="PacTune.svg">hicolor/scalable/apps/ICON.svg</file>
+    </gresource>
+</gresources>

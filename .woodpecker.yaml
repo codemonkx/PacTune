@@ -1,0 +1,64 @@
+matrix:
+  RUST: [stable, beta, nightly]
+
+steps:
+  test:
+    when:
+      event: [push, pull_request, tag]
+    image: rust
+    environment:
+      CARGO_TERM_COLOR: always
+    commands:
+      - rustup default $RUST
+      - apt-get update
+      - >-
+        apt-get -q -y install
+        libgtk-4-1
+        libgtk-4-dev
+        libgraphene-1.0-0
+        libadwaita-1-dev
+        libgstreamer1.0-dev
+        libgstreamer-plugins-base1.0-dev
+        libgstreamer-plugins-bad1.0-dev
+        gstreamer1.0-plugins-base
+        gstreamer1.0-plugins-good
+        gstreamer1.0-plugins-bad
+        gstreamer1.0-plugins-ugly
+        gstreamer1.0-libav
+        gstreamer1.0-tools
+        gstreamer1.0-x
+        gstreamer1.0-alsa
+        gstreamer1.0-gl
+      - cargo check -j 4
+
+  lint:
+    when:
+      event: [push, pull_request, tag]
+      matrix:
+        RUST: stable
+    image: rust
+    environment:
+      CARGO_TERM_COLOR: always
+    commands:
+      - rustup component add clippy rustfmt
+      - apt-get update
+      - >-
+        apt-get -q -y install
+        libgtk-4-1
+        libgtk-4-dev
+        libgraphene-1.0-0
+        libadwaita-1-dev
+        libgstreamer1.0-dev
+        libgstreamer-plugins-base1.0-dev
+        libgstreamer-plugins-bad1.0-dev
+        gstreamer1.0-plugins-base
+        gstreamer1.0-plugins-good
+        gstreamer1.0-plugins-bad
+        gstreamer1.0-plugins-ugly
+        gstreamer1.0-libav
+        gstreamer1.0-tools
+        gstreamer1.0-x
+        gstreamer1.0-alsa
+        gstreamer1.0-gl
+      - cargo fmt -- --check
+      - cargo clippy -j 4 -- -D warnings
