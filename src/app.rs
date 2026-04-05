@@ -123,7 +123,7 @@ pub enum AppMsg {
     DragLeave,
     ShowHideSidebar,
     SetSidebarVisible(bool),
-    ScrollLyrics(i64),
+    ScrollLyrics(f64),
     ToggleSearch,
     SetRepeatStage(RepeatStage),
     OpenAlbumDetail(String),
@@ -171,7 +171,7 @@ impl Component for AppModel {
                                 set_vexpand: true,
                                 set_valign: gtk::Align::Fill,
                                 adw::StatusPage {
-                                    set_icon_name: Some("Vinyl"),
+                                    set_icon_name: Some("PacTune"),
                                     set_title: "Vinyl",
                                     set_description: Some("Drop a folder here, or pick one below."),
                                     gtk::Box {
@@ -203,27 +203,39 @@ impl Component for AppModel {
                             set_orientation: gtk::Orientation::Vertical,
                             add_css_class: "main-bg",
 
-                            // Top bar: minimal header
-                            gtk::Box {
-                                set_orientation: gtk::Orientation::Horizontal,
-                                set_margin_start: 16,
-                                set_margin_end: 16,
+                            // Top bar: rigid 3-column anchor
+                            gtk::Grid {
+                                add_css_class: "top-bar",
+                                set_margin_start: 8,
+                                set_margin_end: 8,
                                 set_margin_top: 4,
                                 set_margin_bottom: 4,
-                                add_css_class: "top-bar",
+                                set_column_spacing: 0,
 
-                                #[name(pack_start_main_header)]
-                                gtk::Box {
-                                    set_orientation: gtk::Orientation::Horizontal,
-                                    set_spacing: 4,
+                                // Column 0: Left Anchor (60px)
+                                attach[0, 0, 1, 1] = &gtk::Box {
+                                    set_halign: gtk::Align::Start,
+                                    set_width_request: 60,
+                                    #[name(pack_start_main_header)]
+                                    gtk::Box {
+                                        set_orientation: gtk::Orientation::Horizontal,
+                                        set_spacing: 4,
+                                    },
                                 },
 
-                                gtk::Box { set_hexpand: true },
+                                // Column 1: Middle Spacer (flexible)
+                                attach[1, 0, 1, 1] = &gtk::Box {
+                                    set_hexpand: true,
+                                },
 
-                                // Native GTK Theme Window Controls
-                                gtk::WindowControls {
-                                    set_side: gtk::PackType::End,
-                                }
+                                // Column 2: Right Anchor (60px)
+                                attach[2, 0, 1, 1] = &gtk::Box {
+                                    set_halign: gtk::Align::End,
+                                    set_width_request: 60,
+                                    gtk::WindowControls {
+                                        set_side: gtk::PackType::End,
+                                    }
+                                },
                             },
 
                             // Body: album grid + right panel
@@ -302,213 +314,234 @@ impl Component for AppModel {
                                 gtk::Box {
                                     set_orientation: gtk::Orientation::Vertical,
                                     set_hexpand: false,
-                                    set_vexpand: false,
+                                    set_vexpand: true,
                                     set_halign: gtk::Align::End,
                                     set_valign: gtk::Align::Fill,
                                     set_width_request: 300,
                                     add_css_class: "right-panel",
 
-                                    // Player card
-                                    gtk::Box {
-                                        set_orientation: gtk::Orientation::Vertical,
-                                        set_hexpand: false,
-                                        set_margin_bottom: 12,
-                                        set_margin_start: 12,
-                                        set_margin_end: 12,
-                                        add_css_class: "player-card",
-
-                                        // Cover art — fixed size, never drives panel width
-                                        #[name(cover)]
-                                        gtk::Image {
-                                            add_css_class: "player-cover",
-                                            set_overflow: gtk::Overflow::Hidden,
-                                            set_icon_name: Some("Vinyl"),
-                                            set_pixel_size: 260,
-                                            set_width_request: 260,
-                                            set_height_request: 260,
-                                            set_hexpand: false,
-                                            set_halign: gtk::Align::Center,
-                                            set_margin_bottom: 16,
-                                        },
-
-                                        // Track info
+                                    adw::Clamp {
+                                        set_maximum_size: 300,
+                                        set_halign: gtk::Align::Fill,
+                                        set_vexpand: true,
+                                        
                                         gtk::Box {
                                             set_orientation: gtk::Orientation::Vertical,
-                                            set_margin_top: 8,
-                                            set_margin_start: 12,
-                                            set_margin_end: 12,
-                                            set_hexpand: false,
-                                            set_vexpand: false,
-                                            set_halign: gtk::Align::Fill,
-                                            set_width_request: 276,
-                                            #[name(title)]
-                                            gtk::Label {
-                                                add_css_class: "player-title",
-                                                set_label: "No track playing",
-                                                set_halign: gtk::Align::Center,
-                                                set_hexpand: false,
-                                                set_ellipsize: gtk::pango::EllipsizeMode::End,
-                                                set_lines: 1,
-                                                set_width_chars: 1,
-                                                set_max_width_chars: 25,
-                                            },
-                                            #[name(artist)]
-                                            gtk::Label {
-                                                add_css_class: "player-artist",
-                                                set_halign: gtk::Align::Center,
-                                                set_hexpand: false,
-                                                set_ellipsize: gtk::pango::EllipsizeMode::End,
-                                                set_lines: 1,
-                                                set_width_chars: 1,
-                                                set_max_width_chars: 25,
-                                            },
-                                            #[name(album)]
-                                            gtk::Label {
-                                                set_visible: false,
-                                            },
-                                        },
-
-                                        // Progress + time (Spotify-style inline)
-                                        gtk::Box {
-                                            set_orientation: gtk::Orientation::Horizontal,
-                                            set_valign: gtk::Align::Center,
-                                            set_margin_top: 24,
-                                            set_margin_bottom: 8,
-                                            set_spacing: 10,
-                                            add_css_class: "progress-box",
-                                            
-                                            gtk::Label {
-                                                add_css_class: "time-label",
-                                                #[watch]
-                                                set_class_active: ("accent", model.getting_position),
-                                                #[watch]
-                                                set_label: &format!("{:02}:{:02}", model.position as u32 / 60, model.position as u32 % 60),
-                                            },
-                                            gtk::Scale {
-                                                add_css_class: "sidebar-progress",
-                                                set_orientation: gtk::Orientation::Horizontal,
-                                                set_hexpand: true,
-                                                set_draw_value: false,
-                                                set_valign: gtk::Align::Center,
-                                                #[watch]
-                                                set_range: (0.0, model.duration),
-                                                #[watch]
-                                                set_value: model.position,
-                                                connect_change_value[sender] => move |_, _, value| {
-                                                    sender.input(AppMsg::GetPosition(value));
-                                                    gtk::glib::Propagation::Stop
-                                                },
-                                                add_controller = gtk::EventControllerLegacy {
-                                                    set_propagation_phase: gtk::PropagationPhase::Capture,
-                                                    connect_event[sender] => move |controller, event| {
-                                                        match event.event_type() {
-                                                            gdk::EventType::ButtonPress => sender.input(AppMsg::StartGetPosition),
-                                                            gdk::EventType::ButtonRelease => {
-                                                                let scale = controller.widget().unwrap().downcast::<gtk::Scale>().unwrap();
-                                                                sender.input(AppMsg::EndGetPosition(scale.value()));
-                                                            },
-                                                            _ => {}
-                                                        }
-                                                        gtk::glib::Propagation::Proceed
-                                                    },
-                                                },
-                                            },
-                                            gtk::Label {
-                                                add_css_class: "time-label",
-                                                #[watch]
-                                                set_label: &{
-                                                    let rem = (model.duration as i64 - model.position as i64).max(0);
-                                                    format!("-{:02}:{:02}", rem as u32 / 60, rem as u32 % 60)
-                                                },
-                                            },
-                                        },
-
-                                        // Playback controls
-                                        gtk::Box {
-                                            set_orientation: gtk::Orientation::Horizontal,
-                                            set_halign: gtk::Align::Center,
-                                            set_spacing: 16,
-                                            set_margin_top: 12,
-                                            gtk::Button {
-                                                add_css_class: "flat",
-                                                add_css_class: "ctrl-btn",
-                                                set_icon_name: "view-continuous-symbolic",
-                                                #[watch]
-                                                set_class_active: ("accent", model.show_lyrics),
-                                                connect_clicked => AppMsg::ToggleLyrics,
-                                            },
-                                            gtk::Button {
-                                                add_css_class: "flat",
-                                                add_css_class: "ctrl-btn",
-                                                set_icon_name: "media-skip-backward-symbolic",
-                                                connect_clicked => AppMsg::TrackPrevious,
-                                            },
-                                            gtk::Button {
-                                                set_css_classes: &["suggested-action", "play-circle"],
-                                                #[watch]
-                                                set_icon_name: &model.play_pause,
-                                                connect_clicked => AppMsg::TrackPlayPause,
-                                            },
-                                            gtk::Button {
-                                                add_css_class: "flat",
-                                                add_css_class: "ctrl-btn",
-                                                set_icon_name: "media-skip-forward-symbolic",
-                                                connect_clicked => AppMsg::TrackNext,
-                                            },
-                                            gtk::Button {
-                                                add_css_class: "flat",
-                                                add_css_class: "ctrl-btn",
-                                                #[watch]
-                                                set_icon_name: &model.repeat_icon,
-                                                connect_clicked => AppMsg::RepeatTrack,
-                                            },
-                                        },
-
-                                        // View switcher / Now Playing (replaces volume row to match mock bottom tabs)
-
-                                    },
-
-                                    // "Up Next" tracklist
-                                    gtk::Box {
-                                        set_orientation: gtk::Orientation::Vertical,
-                                        set_vexpand: true,
-                                        set_margin_start: 12,
-                                        set_margin_end: 12,
-                                        set_margin_bottom: 12,
-                                        add_css_class: "upnext-card",
-
-
-
-                                        #[name(right_panel_stack)]
-                                        gtk::Stack {
-                                            set_transition_type: gtk::StackTransitionType::Crossfade,
                                             set_vexpand: true,
-                                            #[watch]
-                                            set_visible_child_name: if model.show_lyrics { "lyrics" } else { "tracklist" },
-                                            
-                                            add_child = &gtk::ScrolledWindow {
-                                                set_vexpand: true,
-                                                set_hscrollbar_policy: gtk::PolicyType::Never,
-                                                set_vscrollbar_policy: gtk::PolicyType::Automatic,
-                                                #[name(tracklist_box)]
+
+                                            // Player card
+                                            gtk::Box {
+                                                set_orientation: gtk::Orientation::Vertical,
+                                                set_hexpand: false,
+                                                set_margin_bottom: 12,
+                                                set_margin_start: 12,
+                                                set_margin_end: 12,
+                                                add_css_class: "player-card",
+
+                                                // Cover art — fixed size, never drives panel width
+                                                #[name(cover)]
+                                                gtk::Image {
+                                                    add_css_class: "player-cover",
+                                                    set_overflow: gtk::Overflow::Hidden,
+                                                    set_icon_name: Some("PacTune"),
+                                                    set_pixel_size: 300,
+                                                    set_width_request: 300,
+                                                    set_height_request: 300,
+                                                    set_hexpand: false,
+                                                    set_halign: gtk::Align::Center,
+                                                    set_margin_bottom: 16,
+                                                },
+
+                                                // Track info
                                                 gtk::Box {
                                                     set_orientation: gtk::Orientation::Vertical,
-                                                    set_vexpand: true,
+                                                    set_margin_top: 8,
+                                                    set_margin_start: 12,
+                                                    set_margin_end: 12,
+                                                    set_hexpand: false,
+                                                    set_vexpand: false,
+                                                    set_halign: gtk::Align::Fill,
+                                                    set_width_request: 276,
+                                                    adw::Clamp {
+                                                        set_maximum_size: 276,
+                                                        set_halign: gtk::Align::Fill,
+                                                        #[name(title)]
+                                                        gtk::Label {
+                                                            add_css_class: "player-title",
+                                                            set_label: "No track playing",
+                                                            set_halign: gtk::Align::Fill,
+                                                            set_xalign: 0.5,
+                                                            set_hexpand: false,
+                                                            set_ellipsize: gtk::pango::EllipsizeMode::End,
+                                                            set_lines: 1,
+                                                            set_max_width_chars: 30,
+                                                        },
+                                                    },
+                                                    adw::Clamp {
+                                                        set_maximum_size: 276,
+                                                        set_halign: gtk::Align::Fill,
+                                                        #[name(artist)]
+                                                        gtk::Label {
+                                                            add_css_class: "player-artist",
+                                                            set_halign: gtk::Align::Fill,
+                                                            set_xalign: 0.5,
+                                                            set_hexpand: false,
+                                                            set_ellipsize: gtk::pango::EllipsizeMode::End,
+                                                            set_lines: 1,
+                                                            set_max_width_chars: 30,
+                                                        },
+                                                    },
+                                                    #[name(album)]
+                                                    gtk::Label {
+                                                        set_visible: false,
+                                                    },
                                                 },
-                                            } -> { set_name: "tracklist" },
-                                            
-                                            add_child = &gtk::ScrolledWindow {
+
+                                                // Progress + time (Spotify-style inline)
+                                                gtk::Box {
+                                                    set_orientation: gtk::Orientation::Horizontal,
+                                                    set_valign: gtk::Align::Center,
+                                                    set_margin_top: 24,
+                                                    set_margin_bottom: 8,
+                                                    set_spacing: 12,
+                                                    add_css_class: "progress-box",
+                                                    
+                                                    gtk::Label {
+                                                        add_css_class: "time-label",
+                                                        set_width_request: 46,
+                                                        set_halign: gtk::Align::Start,
+                                                        #[watch]
+                                                        set_class_active: ("accent", model.getting_position),
+                                                        #[watch]
+                                                        set_label: &format!("{:02}:{:02}", model.position as u32 / 60, model.position as u32 % 60),
+                                                    },
+                                                    gtk::Scale {
+                                                        add_css_class: "sidebar-progress",
+                                                        set_orientation: gtk::Orientation::Horizontal,
+                                                        set_hexpand: true,
+                                                        set_draw_value: false,
+                                                        set_valign: gtk::Align::Center,
+                                                        #[watch]
+                                                        set_range: (0.0, model.duration),
+                                                        #[watch]
+                                                        set_value: model.position,
+                                                        connect_change_value[sender] => move |_, _, value| {
+                                                            sender.input(AppMsg::GetPosition(value));
+                                                            gtk::glib::Propagation::Stop
+                                                        },
+                                                        add_controller = gtk::EventControllerLegacy {
+                                                            set_propagation_phase: gtk::PropagationPhase::Capture,
+                                                            connect_event[sender] => move |controller, event| {
+                                                                match event.event_type() {
+                                                                    gdk::EventType::ButtonPress => sender.input(AppMsg::StartGetPosition),
+                                                                    gdk::EventType::ButtonRelease => {
+                                                                        let scale = controller.widget().unwrap().downcast::<gtk::Scale>().unwrap();
+                                                                        sender.input(AppMsg::EndGetPosition(scale.value()));
+                                                                    },
+                                                                    _ => {}
+                                                                }
+                                                                gtk::glib::Propagation::Proceed
+                                                            },
+                                                        },
+                                                    },
+                                                    gtk::Label {
+                                                        add_css_class: "time-label",
+                                                        set_width_request: 46,
+                                                        set_halign: gtk::Align::End,
+                                                        #[watch]
+                                                        set_label: &{
+                                                            let rem = (model.duration as i64 - model.position as i64).max(0);
+                                                            format!("-{:02}:{:02}", rem as u32 / 60, rem as u32 % 60)
+                                                        },
+                                                    },
+                                                },
+
+                                                // Playback controls
+                                                gtk::Box {
+                                                    set_orientation: gtk::Orientation::Horizontal,
+                                                    set_halign: gtk::Align::Center,
+                                                    set_spacing: 16,
+                                                    set_margin_top: 12,
+                                                    gtk::Button {
+                                                        add_css_class: "flat",
+                                                        add_css_class: "ctrl-btn",
+                                                        set_icon_name: "view-continuous-symbolic",
+                                                        #[watch]
+                                                        set_class_active: ("accent", model.show_lyrics),
+                                                        connect_clicked => AppMsg::ToggleLyrics,
+                                                    },
+                                                    gtk::Button {
+                                                        add_css_class: "flat",
+                                                        add_css_class: "ctrl-btn",
+                                                        set_icon_name: "media-skip-backward-symbolic",
+                                                        connect_clicked => AppMsg::TrackPrevious,
+                                                    },
+                                                    gtk::Button {
+                                                        set_css_classes: &["suggested-action", "play-circle"],
+                                                        #[watch]
+                                                        set_icon_name: &model.play_pause,
+                                                        connect_clicked => AppMsg::TrackPlayPause,
+                                                    },
+                                                    gtk::Button {
+                                                        add_css_class: "flat",
+                                                        add_css_class: "ctrl-btn",
+                                                        set_icon_name: "media-skip-forward-symbolic",
+                                                        connect_clicked => AppMsg::TrackNext,
+                                                    },
+                                                    gtk::Button {
+                                                        add_css_class: "flat",
+                                                        add_css_class: "ctrl-btn",
+                                                        #[watch]
+                                                        set_icon_name: &model.repeat_icon,
+                                                        connect_clicked => AppMsg::RepeatTrack,
+                                                    },
+                                                },
+
+                                                // View switcher / Now Playing (replaces volume row to match mock bottom tabs)
+
+                                            },
+
+                                            // "Up Next" tracklist
+                                            gtk::Box {
+                                                set_orientation: gtk::Orientation::Vertical,
                                                 set_vexpand: true,
-                                                set_hscrollbar_policy: gtk::PolicyType::Never,
-                                                set_vscrollbar_policy: gtk::PolicyType::Automatic,
-                                                set_propagate_natural_height: true,
-                                                #[local_ref]
-                                                lyrics_view -> gtk::ListView {
-                                                    set_align: gtk::Align::Center,
-                                                    add_css_class: "track-list",
-                                                    set_single_click_activate: true,
-                                                },
-                                            } -> { set_name: "lyrics" }
+                                                set_margin_start: 12,
+                                                set_margin_end: 12,
+                                                set_margin_bottom: 12,
+                                                add_css_class: "upnext-card",
+
+                                                #[name(right_panel_stack)]
+                                                gtk::Stack {
+                                                    set_transition_type: gtk::StackTransitionType::Crossfade,
+                                                    set_vexpand: true,
+                                                    #[watch]
+                                                    set_visible_child_name: if model.show_lyrics { "lyrics" } else { "tracklist" },
+                                                    
+                                                    add_child = &gtk::ScrolledWindow {
+                                                        set_vexpand: true,
+                                                        set_hscrollbar_policy: gtk::PolicyType::Never,
+                                                        set_vscrollbar_policy: gtk::PolicyType::Automatic,
+                                                        #[name(tracklist_box)]
+                                                        gtk::Box {
+                                                            set_orientation: gtk::Orientation::Vertical,
+                                                            set_vexpand: true,
+                                                        },
+                                                    } -> { set_name: "tracklist" },
+                                                    
+                                                    add_child = &gtk::ScrolledWindow {
+                                                        set_vexpand: true,
+                                                        set_hscrollbar_policy: gtk::PolicyType::Never,
+                                                        set_vscrollbar_policy: gtk::PolicyType::Automatic,
+                                                        set_propagate_natural_height: true,
+                                                        #[local_ref]
+                                                        lyrics_view -> gtk::ListView {
+                                                            set_align: gtk::Align::Center,
+                                                            add_css_class: "track-list",
+                                                            set_single_click_activate: true,
+                                                        },
+                                                    } -> { set_name: "lyrics" }
+                                                }
+                                            },
                                         }
                                     },
                                 },
@@ -731,7 +764,7 @@ impl Component for AppModel {
                 widgets.artist.set_label("");
                 widgets.album.set_label("");
                 self.set_duration(100.0);
-                widgets.cover.set_icon_name(Some("Vinyl"));
+                widgets.cover.set_icon_name(Some("PacTune"));
                 self.album_detail.emit(AlbumDetailMsg::Clear);
                 while widgets.content_nav_view.navigation_stack().n_items() > 1 {
                     widgets.content_nav_view.pop();
@@ -783,10 +816,11 @@ impl Component for AppModel {
             }
             AppMsg::UpdateMusicBox => {
                 if let Some(track) = self.player_state.get_track() {
-                    self.playlist.emit(PlaylistMsg::AccentTrack(self.player_state.current_track() as u32));
                     widgets.title.set_label(track.title());
                     widgets.artist.set_label(track.artist());
                     widgets.album.set_label(track.album());
+                    self.playlist.emit(PlaylistMsg::FilterByAlbum(Some(track.album().to_string())));
+                    self.playlist.emit(PlaylistMsg::AccentTrack(self.player_state.current_track() as u32));
                     self.lyrics.clear();
 
                     let artist_name = track.artist().to_string();
@@ -888,9 +922,9 @@ impl Component for AppModel {
             }
             AppMsg::UpdatePosition(position) => {
                 if self.player_state.is_playing() && !self.getting_position {
-                    self.set_position(position as f64);
+                    self.set_position(position as f64 / 1000.0);
                     if !self.raw_lyrics.is_empty() {
-                        sender.input(AppMsg::ScrollLyrics(position as i64));
+                        sender.input(AppMsg::ScrollLyrics(position as f64 / 1000.0));
                     }
                 }
             }
@@ -909,19 +943,24 @@ impl Component for AppModel {
                     self.player_state.seek_position(self.position);
                 }
             }
-            AppMsg::ScrollLyrics(position) => {
-                if let Some(idx) = self
-                    .lyrics
-                    .find(|choice| choice.position() == Some(position))
-                {
-                    self.lyrics
-                        .iter()
-                        .for_each(|choice| choice.borrow().unaccent());
-                    let cell = self.lyrics.get(idx).unwrap();
-                    cell.borrow().accent();
-                    widgets
-                        .lyrics_view
-                        .scroll_to(idx, ListScrollFlags::NONE, None);
+            AppMsg::ScrollLyrics(current_time) => {
+                let mut best_idx = None;
+                for (idx, choice) in self.lyrics.iter().enumerate() {
+                    if let Some(lyric_time) = choice.borrow().position() {
+                        if lyric_time as f64 <= current_time {
+                            best_idx = Some(idx as u32);
+                        } else {
+                            break;
+                        }
+                    }
+                }
+
+                if let Some(idx) = best_idx {
+                    self.lyrics.iter().for_each(|choice| choice.borrow().unaccent());
+                    if let Some(cell) = self.lyrics.get(idx) {
+                        cell.borrow().accent();
+                        widgets.lyrics_view.scroll_to(idx, gtk::ListScrollFlags::FOCUS, None);
+                    }
                 }
             }
             AppMsg::OpenResponse(paths, sort) => {

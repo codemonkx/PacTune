@@ -1,9 +1,9 @@
 [Desktop Entry]
-Name=Vinyl
+Name=PacTune
 GenericName=Music Player
-TryExec=Vinyl
-Exec=Vinyl %U
-Icon=page.codeberg.M23Snezhok.Vinyl
+TryExec=pactune
+Exec=pactune %U
+Icon=page.codeberg.M23Snezhok.PacTune
 Terminal=false
 Type=Application
 Categories=GNOME;GTK;Music;Audio;

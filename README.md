@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./data/hicolor/scalable/apps/ICON.svg" width="128" alt="PacTune Logo" />
+<img src="./images/logo.png" width="128" alt="PacTune Logo" />
 
 # PacTune
 
@@ -35,7 +35,11 @@ PacTune is a clean, fast music player designed for Linux desktop environments. B
 
 ---
 
+## Screenshots
 
+<div align="center">
+  <img src="./images/Screenshort-1.png" alt="PacTune Interface" width="800" />
+</div>
 
 ---
 

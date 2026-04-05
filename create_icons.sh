@@ -20,10 +20,10 @@ else
 fi
 
 # Create icon directory structure
-mkdir -p data/hicolor/{48x48,64x64,128x128,256x256,512x512}/apps
+mkdir -p data/hicolor/{48x48,64x64,96x96,128x128,256x256,512x512}/apps
 
 # Generate icons at different sizes with high quality
-SIZES=(48 64 128 256 512)
+SIZES=(48 64 96 128 256 512)
 
 for size in "${SIZES[@]}"; do
     output="data/hicolor/${size}x${size}/apps/page.codeberg.M23Snezhok.PacTune.png"

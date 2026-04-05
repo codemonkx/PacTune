@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>page.codeberg.M23Snezhok.Vinyl</id>
+  <id>page.codeberg.M23Snezhok.PacTune</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
 
-  <name>Vinyl</name>
+  <name>PacTune</name>
   <summary>Elegant music player</summary>
   <description>
     <p>
-      Vinyl is a simple and elegant adwaita music player, which aims to provide a simple codebase for developers,
+      PacTune is a simple and elegant adwaita music player, which aims to provide a simple codebase for developers,
       while simple users get the same or more features as in other music players. Flawless integrated with the GNOME desktop, 
-      Vinyl provides a simple user-friendly interface, MPRIS support, lyrics support and more. Vinyl is the first player with 
+      PacTune provides a simple user-friendly interface, MPRIS support, lyrics support and more. PacTune is the first player with 
       a good lyrics (.lrc) support.
     </p>
 
@@ -19,7 +19,7 @@
       <li>Very simple user-friendly interface inspired by amberol.</li>
       <li>Play of music using GStreamer.</li>
       <li>Viewing of lyrics like listview.</li>
-      <li>MPRIS support for controlling Vinyl from other applications.</li>
+      <li>MPRIS support for controlling PacTune from other applications.</li>
       <li>A fully responsive interface using GTK and Libadwaita.</li>
     </ul>
   </description>
@@ -28,13 +28,13 @@
     <name translate="no">M23Snezhok</name>
   </developer>
 
-  <url type="homepage">https://codeberg.org/M23Snezhok/Vinyl</url>
-  <url type="vcs-browser">https://codeberg.org/M23Snezhok/Vinyl</url>
-  <url type="bugtracker">https://codeberg.org/M23Snezhok/Vinyl/issues</url>
-  <url type="faq">https://codeberg.org/M23Snezhok/Vinyl#readme</url>
+  <url type="homepage">https://codeberg.org/M23Snezhok/PacTune</url>
+  <url type="vcs-browser">https://codeberg.org/M23Snezhok/PacTune</url>
+  <url type="bugtracker">https://codeberg.org/M23Snezhok/PacTune/issues</url>
+  <url type="faq">https://codeberg.org/M23Snezhok/PacTune#readme</url>
 
-  <translation type="gettext">Vinyl</translation>
-  <launchable type="desktop-id">page.codeberg.M23Snezhok.Vinyl.desktop</launchable>
+  <translation type="gettext">PacTune</translation>
+  <launchable type="desktop-id">page.codeberg.M23Snezhok.PacTune.desktop</launchable>
   <content_rating type="oars-1.1" />
 
   <branding>
@@ -53,29 +53,29 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://codeberg.org/M23Snezhok/Vinyl/raw/tag/v1.1.0/images/preview1.png</image>
-      <caption>Vinyl playing Why Are Sundays So Depressing</caption>
+      <image>https://codeberg.org/M23Snezhok/PacTune/raw/tag/v1.1.0/images/preview1.png</image>
+      <caption>PacTune playing Why Are Sundays So Depressing</caption>
     </screenshot>
 
     <screenshot>
-      <image>https://codeberg.org/M23Snezhok/Vinyl/raw/tag/v1.1.0/images/preview2.png</image>
-      <caption>Vinyl shows lyrics for the currently playing track</caption>
+      <image>https://codeberg.org/M23Snezhok/PacTune/raw/tag/v1.1.0/images/preview2.png</image>
+      <caption>PacTune shows lyrics for the currently playing track</caption>
     </screenshot>
 
     <screenshot>
-      <image>https://codeberg.org/M23Snezhok/Vinyl/raw/tag/v1.1.0/images/preview3.png</image>
-      <caption>Resizable window Vinyl</caption>
+      <image>https://codeberg.org/M23Snezhok/PacTune/raw/tag/v1.1.0/images/preview3.png</image>
+      <caption>Resizable window PacTune</caption>
     </screenshot>
 
     <screenshot>
-      <image>https://codeberg.org/M23Snezhok/Vinyl/raw/tag/v1.1.0/images/preview4.png</image>
-      <caption>Resizable window Vinyl with lyrics</caption>
+      <image>https://codeberg.org/M23Snezhok/PacTune/raw/tag/v1.1.0/images/preview4.png</image>
+      <caption>Resizable window PacTune with lyrics</caption>
     </screenshot>
   </screenshots>
 
   <releases>
   <release version="1.1.0" date="2026-03-17">
-    <url type="details">https://codeberg.org/M23Snezhok/Vinyl/releases/tag/v1.1.0</url>
+    <url type="details">https://codeberg.org/M23Snezhok/PacTune/releases/tag/v1.1.0</url>
     <description>
       <p>Synchronized lyrics have arrived!</p>
         <ul>
@@ -86,7 +86,7 @@
     </description>
   </release>
   <release version="1.0.1" date="2026-03-09">
-    <url type="details">https://codeberg.org/M23Snezhok/Vinyl/releases/tag/v1.0.1</url>
+    <url type="details">https://codeberg.org/M23Snezhok/PacTune/releases/tag/v1.0.1</url>
     <description>
       <p>HOTFIX</p>
         <ul>
@@ -96,7 +96,7 @@
     </description>
   </release>
   <release version="1.0" date="2026-03-08">
-    <url type="details">https://codeberg.org/M23Snezhok/Vinyl/releases/tag/v1.0</url>
+    <url type="details">https://codeberg.org/M23Snezhok/PacTune/releases/tag/v1.0</url>
     <description>
       <p>First release</p>
         <ul>

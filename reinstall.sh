@@ -55,7 +55,7 @@ info "Binary updated at $BIN_DIR/pactune"
 section "Updating icons and desktop files..."
 
 # Install PNG icons at multiple sizes for best quality
-for size in 48 64 128 256 512; do
+for size in 48 64 96 128 256 512; do
     ICON_DIR="$HOME/.local/share/icons/hicolor/${size}x${size}/apps"
     mkdir -p "$ICON_DIR"
     if [[ -f "data/hicolor/${size}x${size}/apps/page.codeberg.M23Snezhok.PacTune.png" ]]; then
@@ -71,7 +71,7 @@ cp data/hicolor/scalable/apps/ICON.svg "$ICON_DIR/page.codeberg.M23Snezhok.PacTu
 APP_DIR="$HOME/.local/share/applications"
 mkdir -p "$APP_DIR"
 
-cat > "$APP_DIR/pactune.desktop" << DESKTOP
+cat > "$APP_DIR/page.codeberg.M23Snezhok.PacTune.desktop" << DESKTOP
 [Desktop Entry]
 Name=PacTune
 GenericName=Music Player

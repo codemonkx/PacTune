@@ -20,7 +20,7 @@ use std::{
 
 use crate::app::AppMsg;
 
-pub static APP_ID: &str = "page.codeberg.M23Snezhok.Vinyl";
+pub static APP_ID: &str = "page.codeberg.M23Snezhok.PacTune";
 pub static OPEN_FILE: Mutex<Option<Vec<PathBuf>>> = Mutex::new(None);
 pub static APP_SENDER: OnceLock<ComponentSender<AppModel>> = OnceLock::new();
 
@@ -71,16 +71,16 @@ fn initialize_custom_icons() {
 
     let display = gtk::gdk::Display::default().unwrap();
     let theme = gtk::IconTheme::for_display(&display);
-    theme.add_resource_path("/page/codeberg/M23Snezhok/Vinyl/icons");
+    theme.add_resource_path("/page/codeberg/M23Snezhok/PacTune/icons");
 }
 
 fn set_global_css() {
     // Load at APPLICATION priority (800) so it beats Adwaita's THEME (600)
     let provider = gtk::CssProvider::new();
     provider.load_from_string(
-        "
+        r#"
     /* ═══════════════════════════════════════════════════════════
-       VINYL — User Requested UI Theme
+       PACTUNE — User Requested UI Theme
        ═══════════════════════════════════════════════════════════ */
 
     window, .background, .main-bg {
@@ -140,6 +140,11 @@ fn set_global_css() {
     }
 
     viewswitcher { margin-bottom: 8px; }
+
+    /* ── StatusPage (Welcome Screen) Logo ────────────────────── */
+    statuspage image {
+        -gtk-icon-size: 256px;
+    }
 
     /* ── Album grid cards ────────────────────────────────────── */
     .album-card-btn {
@@ -257,7 +262,9 @@ fn set_global_css() {
         font-size: 10pt;
         font-weight: 500;
         color: #B3B3B3;
-        min-width: 40px;
+        min-width: 46px; /* Fixed width for digits to prevent jumps */
+        text-align: center;
+        font-feature-settings: "tnum"; /* Tabular (fixed-width) numbers */
     }
 
     /* ── Playback buttons ────────────────────────────────────── */
@@ -308,17 +315,22 @@ fn set_global_css() {
     }
 
     /* ── Custom Cards (Right Panel) ──────────────────────────── */
-    .right-panel * {
-        max-width: 300px;
+    .top-bar {
+        min-width: 0;
+        transition: none; /* No shifts allowed */
+        width: 100%;
     }
-    
-    .right-panel {
+
+    .right-panel, .right-panel > * {
         background: transparent;
         width: 300px !important;
         min-width: 300px !important;
         max-width: 300px !important;
-        margin-right: 4px;
+        margin-right: 0 !important; /* Remove wiggle room */
         overflow: hidden;
+        flex-basis: 300px;
+        flex-grow: 0;
+        flex-shrink: 0;
     }
 
     .player-card {
@@ -329,6 +341,7 @@ fn set_global_css() {
         padding: 16px;
         margin-bottom: 12px;
         width: 300px;
+        min-width: 300px;
         max-width: 300px;
     }
 
@@ -338,30 +351,39 @@ fn set_global_css() {
         border: none;
         padding: 8px;
         margin-bottom: 8px;
+        max-width: 300px;
     }
 
     .player-cover {
-        border-radius: 16px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        margin-bottom: 8px;
-        border: 1px solid rgba(255,255,255,0.04);
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        margin-bottom: 24px;
+        border: 1px solid rgba(255,255,255,0.08);
+        width: 240px;
+        height: 240px;
+        min-width: 240px;
+        max-width: 240px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .player-title {
-        font-size: 11pt;
+        font-size: 11.5pt;
         font-weight: 700;
         color: #fff;
         margin-bottom: 2px;
         min-width: 0;
         max-width: 276px;
+        text-overflow: ellipsis;
     }
 
     .player-artist {
-        font-size: 9.5pt;
+        font-size: 10pt;
         font-weight: 500;
         color: rgba(255,255,255,0.5);
         min-width: 0;
         max-width: 276px;
+        text-overflow: ellipsis;
     }
 
     .upnext-header {
@@ -390,7 +412,7 @@ fn set_global_css() {
     .overlay-layer.visible {
         opacity: 1;
     }
-    ");
+    "#);
 
     // Use USER priority (800) — highest available, beats Adwaita theme (600)
     gtk::style_context_add_provider_for_display(

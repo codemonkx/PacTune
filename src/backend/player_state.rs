@@ -141,7 +141,7 @@ impl PlayerState {
                         if let Some(position) = position.position()
                             && let Err(e) = sender
                                 .input_sender()
-                                .send(AppMsg::UpdatePosition(position.seconds()))
+                                .send(AppMsg::UpdatePosition(position.mseconds()))
                         {
                             error!("Failed to send position: {:?}", e);
                         }

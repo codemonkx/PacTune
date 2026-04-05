@@ -100,7 +100,7 @@ done
 # Also install the SVG as fallback
 ICON_DIR="$HOME/.local/share/icons/hicolor/scalable/apps"
 mkdir -p "$ICON_DIR"
-cp data/hicolor/scalable/apps/ICON.svg "$ICON_DIR/page.codeberg.M23Snezhok.PacTune.svg"
+cp images/pactune-logo.svg "$ICON_DIR/page.codeberg.M23Snezhok.PacTune.svg"
 
 info "Icons installed (PNG + SVG)"
 
@@ -109,7 +109,7 @@ APP_DIR="$HOME/.local/share/applications"
 mkdir -p "$APP_DIR"
 
 # Write a clean desktop file with the correct absolute path and no DBusActivatable
-cat > "$APP_DIR/pactune.desktop" << DESKTOP
+cat > "$APP_DIR/page.codeberg.M23Snezhok.PacTune.desktop" << DESKTOP
 [Desktop Entry]
 Name=PacTune
 GenericName=Music Player
@@ -125,7 +125,7 @@ X-SingleMainWindow=true
 MimeType=audio/mpeg;audio/wav;audio/x-aac;audio/x-aiff;audio/x-ape;audio/x-flac;audio/x-m4a;audio/x-m4b;audio/x-mp1;audio/x-mp2;audio/x-mp3;audio/x-mpg;audio/x-mpeg;audio/x-mpegurl;audio/x-opus+ogg;audio/x-pn-aiff;audio/x-pn-au;audio/x-pn-wav;audio/x-speex;audio/x-vorbis;audio/x-vorbis+ogg;audio/x-wavpack;inode/directory;
 DESKTOP
 
-info "Desktop entry installed to $APP_DIR/pactune.desktop"
+info "Desktop entry installed to $APP_DIR/page.codeberg.M23Snezhok.PacTune.desktop"
 
 # ── 7. Install D-Bus service file (for GNOME launcher activation) ─────────────
 DBUS_DIR="$HOME/.local/share/dbus-1/services"

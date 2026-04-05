@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=page.codeberg.M23Snezhok.PacTune
+Exec=pactune --gapplication-service
+
