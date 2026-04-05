@@ -1013,6 +1013,7 @@ impl Component for AppModel {
             AppMsg::OpenAlbumDetail(album_name) => {
                 self.playlist.emit(PlaylistMsg::FilterByAlbum(Some(album_name)));
                 self.set_current_list_title("Up Next".to_string());
+                self.set_show_lyrics(false);
             }
             AppMsg::CloseAlbumDetail => {
                 self.playlist.emit(PlaylistMsg::FilterByAlbum(None));
