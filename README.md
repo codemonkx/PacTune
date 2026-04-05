@@ -76,8 +76,8 @@ Vinyl is a music player that makes listening to your music collection easy and e
 
 1. **Download the code:**
 ```bash
-git clone https://codeberg.org/M23Snezhok/Vinyl.git
-cd Vinyl
+git clone https://github.com/codemonkx/PacTune.git
+cd PacTune
 ```
 
 2. **Run the installer:**
@@ -142,8 +142,8 @@ If something is missing, the installer will tell you what to install.
 
 ```bash
 # Clone the repository
-git clone https://codeberg.org/M23Snezhok/Vinyl.git
-cd Vinyl
+git clone https://github.com/codemonkx/PacTune.git
+cd PacTune
 
 # Build release version
 cargo build --release
@@ -199,7 +199,7 @@ Things we want to add:
 - [ ] Podcast support
 - [ ] Queue management
 
-Have an idea? Open an issue on Codeberg!
+Have an idea? Open an issue on GitHub!
 
 ---
 
@@ -216,7 +216,7 @@ We welcome contributions! Here's how you can help:
 
 ## Credits
 
-**Created by:** Mikhail Kostin ([@M23Snezhok](https://codeberg.org/M23Snezhok))
+**Created by:** codemonkx ([@codemonkx](https://github.com/codemonkx))
 
 **Built with love for:**
 - Music lovers
@@ -239,7 +239,7 @@ See the [LICENSE](LICENSE) file for details.
 
 **Enjoy your music! 🎵**
 
-If you like Vinyl, give it a star on [Codeberg](https://codeberg.org/M23Snezhok/Vinyl)!
+If you like Vinyl, give it a star on [GitHub](https://github.com/codemonkx/PacTune)!
 
 </div>
 
